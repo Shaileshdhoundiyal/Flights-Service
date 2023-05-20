@@ -3,6 +3,7 @@ const {Logger} = require('../config');
 const {AppError} = require('../utils');
 const {StatusCodes} = require('http-status-codes');
 const { response } = require('express');
+const {Airport} = require('../models')
 
 
 class CrudRepository{
@@ -31,6 +32,7 @@ class CrudRepository{
          if(!response){
             throw new AppError("the airplane you want is not present",StatusCodes.NOT_FOUND);
         }
+        return response;
     }
     async getAll(){
             const response = await this.model.findAll()

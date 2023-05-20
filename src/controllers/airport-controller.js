@@ -1,19 +1,21 @@
 const { response } = require('express');
 const { StatusCodes } = require('http-status-codes');
-const {AirplaneService} = require('../services');
+const {AirportServices} = require('../services');
 const {Sucess_response , error_resonse} = require('../utils');
 
 
-async function CreateAirplane(req,res){
+async function CreateAirport(req,res){
     try {
         //console.log("inside the airplane controller");
-        const airplane = await AirplaneService.createAirplane({
-            modelNumber : req.body.ModelNumber,
-            capacity : req.body.Capacity
+        const airport = await AirportServices.CreateAirport({
+            name : req.body.name,
+            code : req.body.code,
+            address : req.body.address,
+            cityId : req.body.cityId
         });
-        Sucess_response.message = "Sucessfully created the airplane";
-        console.log(airplane);
-        Sucess_response.data = airplane;
+        Sucess_response.message = "Sucessfully created the airport";
+        console.log(airport);
+        Sucess_response.data = airport;
         return res.status(StatusCodes.CREATED).json(Sucess_response)
     } catch (error) {
         error_resonse.error = error;
@@ -21,11 +23,11 @@ async function CreateAirplane(req,res){
     }
 }
 
-async function DeleteAirplane(req,res){
+async function DeleteAirport(req,res){
     try {
-        const airplane =  await AirplaneService.DeleteAirplane(req.params.id);
+        const airport =  await AirportServices.DeleteAirport(req.params.id);
         Sucess_response.message = "Sucessfully deleted the airplane"
-        Sucess_response.data = airplane;
+        Sucess_response.data = airport;
         return res.status(StatusCodes.OK).json(Sucess_response)
     } catch (error) {
         error_resonse.error = error;
@@ -33,23 +35,11 @@ async function DeleteAirplane(req,res){
     }
 }
 
-async function GetAirplane(req,res){
+async function GetAirport(req,res){
     try {
-        const airplane =  await AirplaneService.GetAirplane(req.params.id);
-        Sucess_response.message = "Sucessfully get the element ";
-        Sucess_response.data = airplane;
-        return res.status(StatusCodes.OK).json(Sucess_response)
-    } catch (error) {
-        error_resonse.error = error;
-        return res.status(error.statusCode).json(error_resonse);
-    }
-}
-
-async function GetAllAirplane(req,res){
-    try {
-        const airplane =  await AirplaneService.GetAllAirplane(req.params.id);
+        const airport =  await AirportServices.GetAirport(req.params.id);
         Sucess_response.message = "Sucessfully get the element "
-        Sucess_response.data = airplane;
+        Sucess_response.data = airport;
         return res.status(StatusCodes.OK).json(Sucess_response)
     } catch (error) {
         error_resonse.error = error;
@@ -57,17 +47,28 @@ async function GetAllAirplane(req,res){
     }
 }
 
-async function UpdateAirplane(req,res){
-    const request = {}
-    if(req.body.Capacity){
-        request.capacity = req.body.Capacity
-    }
-    if(req.body.ModelNumber){
-        request.modelNumber = req.body.ModelNumber
-    }
-    console.log(request);
+async function GetAllAirport(req,res){
     try {
-        const airplane =  await AirplaneService.UpdateAirplane(request,req.params.id);
+        const airport =  await AirportServices.GetAllAirport(req.params.id);
+        Sucess_response.message = "Sucessfully get the element "
+        Sucess_response.data = airport;
+        return res.status(StatusCodes.OK).json(Sucess_response)
+    } catch (error) {
+        error_resonse.error = error;
+        return res.status(error.statusCode).json(error_resonse);
+    }
+}
+
+async function UpdateAirport(req,res){
+    try {
+        const request = {};
+        if(req.body.name)
+            request.name = req.body.name;
+        if(req.body.address)
+            request.address = req.body.address;
+        if(req.body.code)
+            request.code = req.body.code;
+        const airport =  await AirportServices.UpdateAirport(request,req.params.id);
         Sucess_response.message = "Sucessfully updated the element "
         Sucess_response.data = airplane;
         return res.status(StatusCodes.OK).json(Sucess_response)
@@ -77,9 +78,10 @@ async function UpdateAirplane(req,res){
     }
 }
 module.exports = {
-    CreateAirplane,
-    DeleteAirplane,
-    GetAirplane,
-    GetAllAirplane,
-    UpdateAirplane
+    CreateAirport,
+    DeleteAirport,
+    GetAirport,
+    GetAllAirport,
+    UpdateAirport
 }
+
